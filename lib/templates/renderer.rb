@@ -30,7 +30,11 @@ module Low
         # Accepts all arguments but only sends arguments required by the sub class.
         def render(**)
           # GOAL: Make return value configurable; ResponseEvent, Response, or body.
-          response = Low::Factories::ResponseFactory.html(body: response_body(**))
+          body = response_body(**)
+
+          return if body.nil? || body == ''
+
+          response = Low::Factories::ResponseFactory.html(body:)
           Low::Events::ResponseEvent.new(response:).tap(&:branch)
         end
 
